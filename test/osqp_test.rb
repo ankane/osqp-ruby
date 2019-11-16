@@ -43,6 +43,9 @@ class OSQPTest < Minitest::Test
   end
 
   def test_numo
+    # faster tests
+    skip if ENV["APPVEYOR"]
+
     require "numo/narray"
 
     p = Numo::NArray.cast([[4, 1], [0, 2]])
