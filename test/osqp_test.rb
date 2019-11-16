@@ -6,7 +6,7 @@ class OSQPTest < Minitest::Test
   end
 
   def test_example
-    p = [[4, 1], [0, 2]]
+    p = [[4, 1], [1, 2]]
     q = [1, 1]
     a = [[1, 1], [1, 0], [0, 1]]
     l = [1, 0, 0]
@@ -29,7 +29,7 @@ class OSQPTest < Minitest::Test
   def test_matrix
     require "matrix"
 
-    p = Matrix.rows([[4, 1], [0, 2]])
+    p = Matrix.rows([[4, 1], [1, 2]])
     q = Vector.elements([1, 1])
     a = Matrix.rows([[1, 1], [1, 0], [0, 1]])
     l = Vector.elements([1, 0, 0])
@@ -48,7 +48,7 @@ class OSQPTest < Minitest::Test
 
     require "numo/narray"
 
-    p = Numo::NArray.cast([[4, 1], [0, 2]])
+    p = Numo::NArray.cast([[4, 1], [1, 2]])
     q = Numo::NArray.cast([1, 1])
     a = Numo::NArray.cast([[1, 1], [1, 0], [0, 1]])
     l = Numo::NArray.cast([1, 0, 0])

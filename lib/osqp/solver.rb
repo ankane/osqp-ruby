@@ -18,7 +18,7 @@ module OSQP
       data = FFI::Data.malloc
       data.n = n
       data.m = m
-      data.p = csc_matrix(p)
+      data.p = csc_matrix(p, upper: true)
       data.q = float_array(q)
       data.a = csc_matrix(a)
       data.l = float_array(l)
@@ -133,7 +133,7 @@ module OSQP
 
     # TODO add support sparse matrices
     # TODO convert to upper triangle like Python
-    def csc_matrix(mtx)
+    def csc_matrix(mtx, upper: false)
       mtx = mtx.to_a
 
       m, n = shape(mtx)
@@ -145,11 +145,11 @@ module OSQP
       # CSC format
       # https://www.gormanalysis.com/blog/sparse-matrix-storage-formats/
       cp << 0
-      n.times do |i|
-        mtx.each_with_index do |row, j|
-          if row[i] != 0
-            cx << row[i]
-            ci << j
+      n.times do |j|
+        mtx.each_with_index do |row, i|
+          if row[j] != 0 && (!upper || i <= j)
+            cx << row[j]
+            ci << i
           end
         end
         # cumulative column values
