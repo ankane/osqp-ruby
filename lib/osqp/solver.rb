@@ -132,7 +132,6 @@ module OSQP
     end
 
     # TODO add support sparse matrices
-    # TODO convert to upper triangle like Python
     def csc_matrix(mtx, upper: false)
       mtx = mtx.to_a
 
