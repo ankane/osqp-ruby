@@ -16,8 +16,8 @@ module OSQP
       data.u = float_array(u)
 
       # work
-      work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP)
-      check_result FFI.osqp_setup(work.ref, data, set)
+      work = FFI::Workspace.malloc
+      check_result FFI.osqp_setup(work.to_ptr.ref, data, set)
       @work = work
     end
 
@@ -25,15 +25,14 @@ module OSQP
       setup(*args, **settings) if args.any? || settings.any?
 
       check_result FFI.osqp_solve(@work)
-      workspace = FFI::Workspace.new(@work)
 
       # data
-      data = FFI::Data.new(workspace.data)
-      x = read_float_array(workspace.x, data.n)
-      y = read_float_array(workspace.y, data.m)
+      data = FFI::Data.new(@work.data)
+      x = read_float_array(@work.x, data.n)
+      y = read_float_array(@work.y, data.m)
 
       # info
-      info = FFI::Info.new(workspace.info)
+      info = FFI::Info.new(@work.info)
 
       # TODO prim_inf_cert and dual_inf_cert
       {
@@ -156,8 +155,7 @@ module OSQP
     end
 
     def dimensions
-      workspace = FFI::Workspace.new(@work)
-      data = FFI::Data.new(workspace.data)
+      data = FFI::Data.new(@work.data)
       [data.m, data.n]
     end
 
