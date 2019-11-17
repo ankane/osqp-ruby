@@ -2,19 +2,10 @@ module OSQP
   class Solver
     def setup(p, q, a, l, u, **settings)
       # settings
-      set = FFI::Settings.malloc
-      FFI.osqp_set_default_settings(set)
-
-      # hack for setting members with []=
-      # safer than send("#{k}=", v)
-      entity = set.to_ptr
-      settings.each do |k, v|
-        entity[k.to_s] = settings_value(v)
-      end
-
-      m, n = shape(a)
+      set = create_settings(settings)
 
       # data
+      m, n = shape(a)
       data = FFI::Data.malloc
       data.n = n
       data.m = m
@@ -27,7 +18,6 @@ module OSQP
       # work
       work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP)
       check_result FFI.osqp_setup(work.ref, data, set)
-
       @work = work
     end
 
@@ -174,6 +164,20 @@ module OSQP
       else
         [a.size, a.first.size]
       end
+    end
+
+    def create_settings(settings)
+      set = FFI::Settings.malloc
+      FFI.osqp_set_default_settings(set)
+
+      # hack for setting members with []=
+      # safer than send("#{k}=", v)
+      entity = set.to_ptr
+      settings.each do |k, v|
+        entity[k.to_s] = settings_value(v)
+      end
+
+      set
     end
 
     # handle booleans
