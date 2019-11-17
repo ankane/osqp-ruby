@@ -44,15 +44,13 @@ module OSQP
 
       # info
       info = FFI::Info.new(workspace.info)
-      status = info.status
-      idx = status.index { |v| v == 0 }
 
       # TODO prim_inf_cert and dual_inf_cert
       {
         x: x,
         y: y,
         iter: info.iter,
-        status: status[0, idx].map(&:chr).join,
+        status: read_string(info.status),
         status_val: info.status_val,
         status_polish: info.status_polish,
         obj_val: info.obj_val,
@@ -129,6 +127,11 @@ module OSQP
     def read_float_array(ptr, size)
       # OSQP float = double
       ptr[0, size * Fiddle::SIZEOF_DOUBLE].unpack("d*")
+    end
+
+    def read_string(char_ptr)
+      idx = char_ptr.index { |v| v == 0 }
+      char_ptr[0, idx].map(&:chr).join
     end
 
     # TODO add support sparse matrices

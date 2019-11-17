@@ -16,6 +16,7 @@ class OSQPTest < Minitest::Test
     result = solver.solve(p, q, a, l, u, alpha: 1.0, verbose: false)
 
     assert_equal 50, result[:iter]
+    assert_equal "solved", result[:status]
     assert_in_delta 1.88, result[:obj_val]
 
     solver.warm_start([1, 2], nil)
@@ -39,6 +40,7 @@ class OSQPTest < Minitest::Test
     result = solver.solve(p, q, a, l, u, alpha: 1.0, verbose: false)
 
     assert_equal 50, result[:iter]
+    assert_equal "solved", result[:status]
     assert_in_delta 1.88, result[:obj_val]
   end
 
@@ -58,6 +60,7 @@ class OSQPTest < Minitest::Test
     result = solver.solve(p, q, a, l, u, alpha: 1.0, verbose: false)
 
     assert_equal 50, result[:iter]
+    assert_equal "solved", result[:status]
     assert_in_delta 1.88, result[:obj_val]
   end
 end
