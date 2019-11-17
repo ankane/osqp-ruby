@@ -58,10 +58,9 @@ module OSQP
 
     def warm_start(x, y)
       # check dimensions
-      workspace = FFI::Workspace.new(@work)
-      data = FFI::Data.new(workspace.data)
-      raise Error, "Expected x to be size #{data.n}, got #{x.size}" if x && x.size != data.n
-      raise Error, "Expected y to be size #{data.m}, got #{y.size}" if y && y.size != data.m
+      m, n = dimensions
+      raise Error, "Expected x to be size #{n}, got #{x.size}" if x && x.size != n
+      raise Error, "Expected y to be size #{m}, got #{y.size}" if y && y.size != m
 
       if x && y
         check_result FFI.osqp_warm_start(@work, float_array(x), float_array(y))
@@ -154,6 +153,12 @@ module OSQP
       cp = int_array(cp)
 
       FFI.csc_matrix(m, n, nnz, cx, ci, cp)
+    end
+
+    def dimensions
+      workspace = FFI::Workspace.new(@work)
+      data = FFI::Data.new(workspace.data)
+      [data.m, data.n]
     end
 
     def shape(a)
