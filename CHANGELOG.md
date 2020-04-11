@@ -1,4 +1,4 @@
-## 0.1.1 (unreleased)
+## 0.1.1 (2020-04-10)
 
 - Changed to Apache 2.0 license to match OSQP
 - Convert P to upper triangle when needed
