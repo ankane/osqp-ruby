@@ -13,8 +13,6 @@ module OSQP
 
     dlload File.expand_path("../../vendor/#{lib}", __dir__)
 
-    # https://github.com/oxfordcontrol/osqp/blob/master/include/osqp.h
-
     typealias "c_float", "double"
     typealias "c_int", "long long"
     typealias "enum", "int"
