@@ -2,7 +2,7 @@
 
 The [OSQP](https://osqp.org/) (Operator Splitting Quadratic Program) solver for Ruby
 
-[![Build Status](https://travis-ci.org/ankane/osqp.svg?branch=master)](https://travis-ci.org/ankane/osqp) [![Build status](https://ci.appveyor.com/api/projects/status/o93q4b56anxmnvwn/branch/master?svg=true)](https://ci.appveyor.com/project/ankane/osqp/branch/master)
+[![Build Status](https://github.com/ankane/osqp/workflows/build/badge.svg?branch=master)](https://github.com/ankane/osqp/actions)
 
 ## Installation
 
