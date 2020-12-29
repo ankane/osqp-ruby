@@ -82,5 +82,6 @@ To get started with development:
 git clone https://github.com/ankane/osqp.git
 cd osqp
 bundle install
+bundle exec rake vendor:all
 bundle exec rake test
 ```
