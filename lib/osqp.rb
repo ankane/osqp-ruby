@@ -14,6 +14,8 @@ module OSQP
   lib_name =
     if Gem.win_platform?
       "libosqp.dll"
+    elsif RbConfig::CONFIG["arch"] =~ /arm64-darwin/i
+      "libosqp.arm64.dylib"
     elsif RbConfig::CONFIG["host_os"] =~ /darwin/i
       "libosqp.dylib"
     else

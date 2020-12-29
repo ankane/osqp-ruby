@@ -1,3 +1,7 @@
+## 0.1.2 (unreleased)
+
+- Added ARM shared library for Mac
+
 ## 0.1.1 (2020-04-10)
 
 - Changed to Apache 2.0 license to match OSQP
