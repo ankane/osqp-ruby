@@ -2,16 +2,13 @@ module OSQP
   module FFI
     extend Fiddle::Importer
 
-    lib =
-      if Gem.win_platform?
-        "libosqp.dll"
-      elsif RbConfig::CONFIG["host_os"] =~ /darwin/i
-        "libosqp.dylib"
-      else
-        "libosqp.so"
-      end
-
-    dlload File.expand_path("../../vendor/#{lib}", __dir__)
+    libs = Array(OSQP.ffi_lib).dup
+    begin
+      dlload Fiddle.dlopen(libs.shift)
+    rescue Fiddle::DLError => e
+      retry if libs.any?
+      raise e
+    end
 
     typealias "c_float", "double"
     typealias "c_int", "long long"
