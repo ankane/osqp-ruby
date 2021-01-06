@@ -19,7 +19,7 @@ end
 Rake::Task["build"].enhance [:ensure_vendor]
 
 def version
-  "0.6.0"
+  "0.6.2"
 end
 
 def download_official(library, file)
@@ -27,7 +27,7 @@ def download_official(library, file)
   require "open-uri"
   require "tmpdir"
 
-  url = "https://bintray.com/bstellato/generic/download_file?file_path=OSQP%2F0.6.0%2F#{file}"
+  url = "https://bintray.com/bstellato/generic/download_file?file_path=OSQP%2F#{version}%2F#{file}"
   puts "Downloading #{file}..."
   dir = Dir.mktmpdir
   Dir.chdir(dir) do

@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 class OSQPTest < Minitest::Test
   def test_version
-    assert_equal "0.6.0", OSQP.lib_version
+    assert_equal "0.6.2", OSQP.lib_version
   end
 
   def test_example

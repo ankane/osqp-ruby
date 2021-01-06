@@ -1,6 +1,7 @@
 ## 0.1.2 (unreleased)
 
 - Added ARM shared library for Mac
+- Updated OSQP to 0.6.2
 
 ## 0.1.1 (2020-04-10)
 
