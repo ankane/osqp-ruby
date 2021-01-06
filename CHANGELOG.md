@@ -1,4 +1,4 @@
-## 0.1.2 (unreleased)
+## 0.1.2 (2021-01-05)
 
 - Added ARM shared library for Mac
 - Updated OSQP to 0.6.2
