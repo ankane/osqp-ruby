@@ -1,8 +1,8 @@
-# OSQP
+# OSQP Ruby
 
 The [OSQP](https://osqp.org/) (Operator Splitting Quadratic Program) solver for Ruby
 
-[![Build Status](https://github.com/ankane/osqp/workflows/build/badge.svg?branch=master)](https://github.com/ankane/osqp/actions)
+[![Build Status](https://github.com/ankane/osqp-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/osqp-ruby/actions)
 
 ## Installation
 
@@ -65,22 +65,22 @@ This library is modeled after the OSQP [Python API](https://osqp.org/docs/interf
 
 ## History
 
-View the [changelog](https://github.com/ankane/osqp/blob/master/CHANGELOG.md)
+View the [changelog](https://github.com/ankane/osqp-ruby/blob/master/CHANGELOG.md)
 
 ## Contributing
 
 Everyone is encouraged to help improve this project. Here are a few ways you can help:
 
-- [Report bugs](https://github.com/ankane/osqp/issues)
-- Fix bugs and [submit pull requests](https://github.com/ankane/osqp/pulls)
+- [Report bugs](https://github.com/ankane/osqp-ruby/issues)
+- Fix bugs and [submit pull requests](https://github.com/ankane/osqp-ruby/pulls)
 - Write, clarify, or fix documentation
 - Suggest or add new features
 
 To get started with development:
 
 ```sh
-git clone https://github.com/ankane/osqp.git
-cd osqp
+git clone https://github.com/ankane/osqp-ruby.git
+cd osqp-ruby
 bundle install
 bundle exec rake vendor:all
 bundle exec rake test
