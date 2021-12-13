@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Improved ARM detection
+
 ## 0.1.2 (2021-01-05)
 
 - Added ARM shared library for Mac
