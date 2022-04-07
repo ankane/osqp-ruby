@@ -9,7 +9,7 @@ The [OSQP](https://osqp.org/) (Operator Splitting Quadratic Program) solver for 
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'osqp'
+gem "osqp"
 ```
 
 ## Getting Started
