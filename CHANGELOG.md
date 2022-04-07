@@ -1,6 +1,7 @@
 ## 0.1.3 (unreleased)
 
 - Improved ARM detection
+- Fixed `x` and `y` in solution
 
 ## 0.1.2 (2021-01-05)
 

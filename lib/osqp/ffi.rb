@@ -66,6 +66,11 @@ module OSQP
       "c_float rho_estimate"
     ]
 
+    Solution = struct [
+      "c_float *x",
+      "c_float *y"
+    ]
+
     Workspace = struct [
       "OSQPData *data",
       "LinSysSolver *linsys_solver",

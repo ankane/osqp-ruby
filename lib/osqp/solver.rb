@@ -26,10 +26,11 @@ module OSQP
 
       check_result FFI.osqp_solve(@work)
 
-      # data
+      # solution
+      solution = FFI::Solution.new(@work.solution)
       data = FFI::Data.new(@work.data)
-      x = read_float_array(@work.x, data.n)
-      y = read_float_array(@work.y, data.m)
+      x = read_float_array(solution.x, data.n)
+      y = read_float_array(solution.y, data.m)
 
       # info
       info = FFI::Info.new(@work.info)

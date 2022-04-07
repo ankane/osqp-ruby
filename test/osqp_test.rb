@@ -18,6 +18,7 @@ class OSQPTest < Minitest::Test
     assert_equal 50, result[:iter]
     assert_equal "solved", result[:status]
     assert_in_delta 1.88, result[:obj_val]
+    assert_elements_in_delta [0.3, 0.7], result[:x]
 
     solver.warm_start([1, 2], nil)
 
