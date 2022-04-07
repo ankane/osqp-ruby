@@ -27,6 +27,8 @@ def download_official(library, file)
   require "open-uri"
   require "tmpdir"
 
+  raise "No longer available"
+
   url = "https://bintray.com/bstellato/generic/download_file?file_path=OSQP%2F#{version}%2F#{file}"
   puts "Downloading #{file}..."
   dir = Dir.mktmpdir
