@@ -2,6 +2,7 @@
 
 - Improved ARM detection
 - Fixed `x` and `y` in solution
+- Fixed memory issue
 
 ## 0.1.2 (2021-01-05)
 
