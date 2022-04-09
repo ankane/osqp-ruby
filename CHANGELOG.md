@@ -1,4 +1,4 @@
-## 0.1.3 (unreleased)
+## 0.1.3 (2022-04-08)
 
 - Improved ARM detection
 - Fixed `x` and `y` in solution
