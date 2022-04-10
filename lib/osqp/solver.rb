@@ -5,16 +5,22 @@ module OSQP
       set = create_settings(settings)
 
       # data
-      refs = []
+      # do not assign directly to struct to keep refs
       m, n = shape(a)
+      p = csc_matrix(p, upper: true)
+      q = float_array(q)
+      a = csc_matrix(a)
+      l = float_array(l)
+      u = float_array(u)
+
       data = FFI::Data.malloc
       data.n = n
       data.m = m
-      data.p = csc_matrix(p, refs, upper: true)
-      data.q = float_array(q, refs)
-      data.a = csc_matrix(a, refs)
-      data.l = float_array(l, refs)
-      data.u = float_array(u, refs)
+      data.p = p
+      data.q = q
+      data.a = a
+      data.l = l
+      data.u = u
 
       # work
       work = FFI::Workspace.malloc
@@ -104,18 +110,14 @@ module OSQP
       end
     end
 
-    def float_array(arr, refs = nil)
+    def float_array(arr)
       # OSQP float = double
-      ptr = Fiddle::Pointer[arr.to_a.pack("d*")]
-      refs << ptr if refs
-      ptr
+      Fiddle::Pointer[arr.to_a.pack("d*")]
     end
 
-    def int_array(arr, refs = nil)
+    def int_array(arr)
       # OSQP int = long long
-      ptr = Fiddle::Pointer[arr.to_a.pack("q*")]
-      refs << ptr if refs
-      ptr
+      Fiddle::Pointer[arr.to_a.pack("q*")]
     end
 
     def read_float_array(ptr, size)
@@ -129,7 +131,7 @@ module OSQP
     end
 
     # TODO add support sparse matrices
-    def csc_matrix(mtx, refs, upper: false)
+    def csc_matrix(mtx, upper: false)
       mtx = mtx.to_a
 
       m, n = shape(mtx)
@@ -153,11 +155,14 @@ module OSQP
       end
 
       nnz = cx.size
-      cx = float_array(cx, refs)
-      ci = int_array(ci, refs)
-      cp = int_array(cp, refs)
+      cx = float_array(cx)
+      ci = int_array(ci)
+      cp = int_array(cp)
 
-      FFI.csc_matrix(m, n, nnz, cx, ci, cp)
+      ptr = FFI.csc_matrix(m, n, nnz, cx, ci, cp)
+      # save refs
+      ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
+      ptr
     end
 
     def dimensions
