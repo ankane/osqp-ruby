@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 class OSQPTest < Minitest::Test
   def test_version
-    assert_equal "0.6.2", OSQP.lib_version
+    assert_match(/\A\d+\.\d+\.\d+\z/, OSQP.lib_version)
   end
 
   def test_example
