@@ -47,10 +47,10 @@ Arrays and matrices can be Ruby arrays
 [[1, 2, 3], [4, 5, 6]]
 ```
 
-Or a Numo NArrays
+Or Numo arrays
 
 ```ruby
-Numo::DFloat.new(3, 2).seq
+Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
 ```
 
 ## Resources
