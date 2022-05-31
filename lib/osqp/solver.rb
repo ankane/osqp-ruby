@@ -4,6 +4,10 @@ module OSQP
       # settings
       set = create_settings(settings)
 
+      # ensure bounds within OSQP infinity
+      l = l.map { |v| v < -FFI::OSQP_INFTY ? -FFI::OSQP_INFTY : v }
+      u = u.map { |v| v > FFI::OSQP_INFTY ? FFI::OSQP_INFTY : v }
+
       # data
       # do not assign directly to struct to keep refs
       m, n = shape(a)

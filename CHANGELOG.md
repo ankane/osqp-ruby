@@ -1,3 +1,7 @@
+## 0.1.4 (unreleased)
+
+- Fixed issue with infinite bounds
+
 ## 0.1.3 (2022-04-08)
 
 - Improved ARM detection

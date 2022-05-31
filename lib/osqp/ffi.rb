@@ -14,6 +14,8 @@ module OSQP
     typealias "c_int", "long long"
     typealias "enum", "int"
 
+    OSQP_INFTY = 1e30
+
     Data = struct [
       "c_int n",
       "c_int m",
