@@ -1,0 +1,16 @@
+platforms:
+  x86_64-linux:
+    url: https://github.com/ankane/ml-builds/releases/download/osqp-0.6.2-1/osqp-0.6.2-x86_64-linux.zip
+    sha256: 330639ffb8082020819a43c5a196c28eb85c209ff518e198fe716bae6a8a1e1d
+  aarch64-linux:
+    url: https://github.com/ankane/ml-builds/releases/download/osqp-0.6.2-1/osqp-0.6.2-aarch64-linux.zip
+    sha256: 8ef1ce28264eca91c14c9c9f2ce92b970f6a50db7db1665d185c7c740b4ce88b
+  x86_64-darwin:
+    url: https://github.com/ankane/ml-builds/releases/download/osqp-0.6.2-1/osqp-0.6.2-x86_64-darwin.zip
+    sha256: 58d03466345c3c1f0e79968fb1fa42b6ccfb28d40625c4310cb8b57432a2a98c
+  arm64-darwin:
+    url: https://github.com/ankane/ml-builds/releases/download/osqp-0.6.2-1/osqp-0.6.2-aarch64-darwin.zip
+    sha256: 2c95b23e7842c82a6a883c2a38c5a89301f33a96f34f4adf35f41021343e8abe
+  x64-mingw:
+    url: https://github.com/ankane/ml-builds/releases/download/osqp-0.6.2-1/osqp-0.6.2-x86_64-windows.zip
+    sha256: 52be51b3921a7cd480d1466956f4649ec88750d0882d2245f8f01e56e986b345
