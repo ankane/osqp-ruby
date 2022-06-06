@@ -11,19 +11,23 @@ module OSQP
   class << self
     attr_accessor :ffi_lib
   end
-  lib_name =
+  lib_path =
     if Gem.win_platform?
-      "libosqp.dll"
+      "x86_64-windows/osqp.dll"
     elsif RbConfig::CONFIG["host_os"] =~ /darwin/i
       if RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i
-        "libosqp.arm64.dylib"
+        "aarch64-darwin/libosqp.dylib"
       else
-        "libosqp.dylib"
+        "x86_64-darwin/libosqp.dylib"
       end
     else
-      "libosqp.so"
+      if RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i
+        "aarch64-linux/libosqp.so"
+      else
+        "x86_64-linux/libosqp.so"
+      end
     end
-  vendor_lib = File.expand_path("../vendor/#{lib_name}", __dir__)
+  vendor_lib = File.expand_path("../vendor/#{lib_path}", __dir__)
   self.ffi_lib = [vendor_lib]
 
   # friendlier error message

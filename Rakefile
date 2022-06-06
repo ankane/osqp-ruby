@@ -7,64 +7,54 @@ Rake::TestTask.new do |t|
   t.pattern = "test/**/*_test.rb"
 end
 
-shared_libraries = %w(libosqp.so libosqp.dylib libosqp.arm64.dylib libosqp.dll)
+directories = %w(x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin x86_64-windows)
 
 # ensure vendor files exist
 task :ensure_vendor do
-  shared_libraries.each do |file|
-    raise "Missing file: #{file}" unless File.exist?("vendor/#{file}")
+  directories.each do |dir|
+    raise "Missing directory: #{dir}" unless Dir.exist?("vendor/#{dir}")
   end
 end
 
 Rake::Task["build"].enhance [:ensure_vendor]
 
-def version
-  "0.6.2"
-end
+def download_file(target, sha256)
+  version = "0.6.2"
 
-def download_official(library, file)
   require "fileutils"
   require "open-uri"
   require "tmpdir"
 
-  raise "No longer available"
-
-  url = "https://bintray.com/bstellato/generic/download_file?file_path=OSQP%2F#{version}%2F#{file}"
+  file = "osqp-#{version}-#{target}.zip"
+  url = "https://github.com/ankane/ml-builds/releases/download/osqp-#{version}-1/#{file}"
   puts "Downloading #{file}..."
-  dir = Dir.mktmpdir
-  Dir.chdir(dir) do
-    File.binwrite(file, URI.open(url).read)
-    command = "tar xf"
-    system "#{command} #{file}"
-    path = "#{dir}/#{file[0..-8]}/lib/#{library}"
-    FileUtils.cp(path, File.expand_path("vendor/#{library}", __dir__))
-    puts "Saved vendor/#{library}"
+  contents = URI.open(url).read
+
+  computed_sha256 = Digest::SHA256.hexdigest(contents)
+  raise "Bad hash: #{computed_sha256}" if computed_sha256 != sha256
+
+  Dir.chdir(Dir.mktmpdir) do
+    File.binwrite(file, contents)
+    dest = File.expand_path("vendor/#{target}", __dir__)
+    FileUtils.rm_r(dest) if Dir.exist?(dest)
+    # run apt install unzip on Linux
+    system "unzip", "-q", file, "-d", dest, exception: true
   end
 end
 
-def download_file(file)
-  require "open-uri"
-
-  url = "https://github.com/ankane/ml-builds/releases/download/osqp-#{version}/#{file}"
-  puts "Downloading #{file}..."
-  dest = "vendor/#{file}"
-  File.binwrite(dest, URI.open(url).read)
-  puts "Saved #{dest}"
-end
-
-# https://bintray.com/bstellato/generic/OSQP
 namespace :vendor do
   task :linux do
-    download_official("libosqp.so", "osqp-#{version}-linux64.tar.gz")
+    download_file("x86_64-linux", "330639ffb8082020819a43c5a196c28eb85c209ff518e198fe716bae6a8a1e1d")
+    download_file("aarch64-linux", "8ef1ce28264eca91c14c9c9f2ce92b970f6a50db7db1665d185c7c740b4ce88b")
   end
 
   task :mac do
-    download_official("libosqp.dylib", "osqp-#{version}-mac64.tar.gz")
-    download_file("libosqp.arm64.dylib")
+    download_file("x86_64-darwin", "58d03466345c3c1f0e79968fb1fa42b6ccfb28d40625c4310cb8b57432a2a98c")
+    download_file("aarch64-darwin", "2c95b23e7842c82a6a883c2a38c5a89301f33a96f34f4adf35f41021343e8abe")
   end
 
   task :windows do
-    download_official("libosqp.dll", "osqp-#{version}-windows64.tar.gz")
+    download_file("x86_64-windows", "40274cea0452e147e18be849a3c6f8093f0e8c6646ebf73d2f46c7493c73db1c")
   end
 
   task all: [:linux, :mac, :windows]
