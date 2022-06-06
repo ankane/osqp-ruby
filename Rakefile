@@ -54,7 +54,7 @@ namespace :vendor do
   end
 
   task :windows do
-    download_file("x86_64-windows", "40274cea0452e147e18be849a3c6f8093f0e8c6646ebf73d2f46c7493c73db1c")
+    download_file("x86_64-windows", "52be51b3921a7cd480d1466956f4649ec88750d0882d2245f8f01e56e986b345")
   end
 
   task all: [:linux, :mac, :windows]
