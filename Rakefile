@@ -33,9 +33,12 @@ def download_file(target, sha256)
   computed_sha256 = Digest::SHA256.hexdigest(contents)
   raise "Bad hash: #{computed_sha256}" if computed_sha256 != sha256
 
+  vendor = File.expand_path("vendor", __dir__)
+  FileUtils.mkdir_p(vendor)
+
   Dir.chdir(Dir.mktmpdir) do
     File.binwrite(file, contents)
-    dest = File.expand_path("vendor/#{target}", __dir__)
+    dest = File.join(vendor, target)
     FileUtils.rm_r(dest) if Dir.exist?(dest)
     # run apt install unzip on Linux
     system "unzip", "-q", file, "-d", dest, exception: true
