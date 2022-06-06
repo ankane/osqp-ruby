@@ -2,6 +2,7 @@
 
 - Added ARM shared library for Linux
 - Fixed issue with infinite bounds
+- Dropped support for Ruby < 2.7
 
 ## 0.1.3 (2022-04-08)
 
