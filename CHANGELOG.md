@@ -1,4 +1,4 @@
-## 0.2.0 (unreleased)
+## 0.2.0 (2022-06-12)
 
 - Added ARM shared library for Linux
 - Fixed issue with infinite bounds
