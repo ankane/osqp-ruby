@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class OSQPTest < Minitest::Test
+class SolverTest < Minitest::Test
   def test_version
     assert_match(/\A\d+\.\d+\.\d+\z/, OSQP.lib_version)
   end
@@ -30,6 +30,31 @@ class OSQPTest < Minitest::Test
   end
 
   def test_matrix
+    p = OSQP::Matrix.new(2, 2)
+    p[0, 0] = 4
+    p[0, 1] = 1
+    p[1, 1] = 2
+
+    q = [1, 1]
+
+    a = OSQP::Matrix.new(3, 2)
+    a[0, 0] = 1
+    a[0, 1] = 1
+    a[1, 0] = 1
+    a[2, 1] = 1
+
+    l = [1, 0, 0]
+    u = [1, 0.7, 0.7]
+
+    solver = OSQP::Solver.new
+    result = solver.solve(p, q, a, l, u, alpha: 1.0, verbose: false)
+
+    assert_equal 50, result[:iter]
+    assert_equal "solved", result[:status]
+    assert_in_delta 1.88, result[:obj_val]
+  end
+
+  def test_ruby_matrix
     require "matrix"
 
     p = Matrix.rows([[4, 1], [1, 2]])

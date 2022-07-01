@@ -2,7 +2,9 @@
 require "fiddle/import"
 
 # modules
+require "osqp/matrix"
 require "osqp/solver"
+require "osqp/utils"
 require "osqp/version"
 
 module OSQP

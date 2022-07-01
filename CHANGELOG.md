@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Added `Matrix` class
+
 ## 0.2.0 (2022-06-12)
 
 - Added ARM shared library for Linux

@@ -53,6 +53,14 @@ Or Numo arrays
 Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
 ```
 
+Or a sparse matrix [unreleased]
+
+```ruby
+a = OSQP::Matrix.new(3, 2)
+a[0, 0] = 1
+a[0, 1] = 1
+```
+
 ## Resources
 
 - [OSQP: An Operator Splitting Solver for Quadratic Programs](https://arxiv.org/pdf/1711.08013.pdf)

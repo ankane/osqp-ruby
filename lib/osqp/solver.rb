@@ -10,16 +10,15 @@ module OSQP
 
       # data
       # do not assign directly to struct to keep refs
-      m, n = shape(a)
       p = csc_matrix(p, upper: true)
-      q = float_array(q)
+      q = Utils.float_array(q)
       a = csc_matrix(a)
-      l = float_array(l)
-      u = float_array(u)
+      l = Utils.float_array(l)
+      u = Utils.float_array(u)
 
       data = FFI::Data.malloc
-      data.n = n
-      data.m = m
+      data.n = a.n
+      data.m = a.m
       data.p = p
       data.q = q
       data.a = a
@@ -74,11 +73,11 @@ module OSQP
       raise Error, "Expected y to be size #{m}, got #{y.size}" if y && y.size != m
 
       if x && y
-        check_result FFI.osqp_warm_start(@work, float_array(x), float_array(y))
+        check_result FFI.osqp_warm_start(@work, Utils.float_array(x), Utils.float_array(y))
       elsif x
-        check_result FFI.osqp_warm_start_x(@work, float_array(x))
+        check_result FFI.osqp_warm_start_x(@work, Utils.float_array(x))
       elsif y
-        check_result FFI.osqp_warm_start_y(@work, float_array(y))
+        check_result FFI.osqp_warm_start_y(@work, Utils.float_array(y))
       else
         raise Error, "Must set x or y"
       end
@@ -114,16 +113,6 @@ module OSQP
       end
     end
 
-    def float_array(arr)
-      # OSQP float = double
-      Fiddle::Pointer[arr.to_a.pack("d*")]
-    end
-
-    def int_array(arr)
-      # OSQP int = long long
-      Fiddle::Pointer[arr.to_a.pack("q*")]
-    end
-
     def read_float_array(ptr, size)
       # OSQP float = double
       ptr[0, size * Fiddle::SIZEOF_DOUBLE].unpack("d*")
@@ -134,54 +123,27 @@ module OSQP
       char_ptr[0, idx].map(&:chr).join
     end
 
-    # TODO add support sparse matrices
     def csc_matrix(mtx, upper: false)
-      mtx = mtx.to_a
+      return mtx if mtx.is_a?(Matrix)
 
-      m, n = shape(mtx)
+      data = mtx.to_a
+      m = data.size
+      n = m > 0 ? data.first.size : 0
 
-      cx = []
-      ci = []
-      cp = []
-
-      # CSC format
-      # https://www.gormanalysis.com/blog/sparse-matrix-storage-formats/
-      cp << 0
-      n.times do |j|
-        mtx.each_with_index do |row, i|
-          if row[j] != 0 && (!upper || i <= j)
-            cx << row[j]
-            ci << i
+      mtx = Matrix.new(m, n)
+      data.each_with_index do |row, i|
+        row.each_with_index do |v, j|
+          if v != 0 && (!upper || i <= j)
+            mtx[i, j] = v
           end
         end
-        # cumulative column values
-        cp << cx.size
       end
-
-      nnz = cx.size
-      cx = float_array(cx)
-      ci = int_array(ci)
-      cp = int_array(cp)
-
-      ptr = FFI.csc_matrix(m, n, nnz, cx, ci, cp)
-      # save refs
-      ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
-      ptr
+      mtx
     end
 
     def dimensions
       data = FFI::Data.new(@work.data)
       [data.m, data.n]
-    end
-
-    def shape(a)
-      if defined?(Matrix) && a.is_a?(Matrix)
-        [a.row_count, a.column_count]
-      elsif defined?(Numo::NArray) && a.is_a?(Numo::NArray)
-        a.shape
-      else
-        [a.size, a.first.size]
-      end
     end
 
     def create_settings(settings)
