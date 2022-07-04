@@ -36,4 +36,9 @@ class MatrixTest < Minitest::Test
     end
     assert_equal "column index out of bounds", error.message
   end
+
+  def test_set_zero
+    a = OSQP::Matrix.new(1, 2)
+    a[0, 0] = 0
+  end
 end

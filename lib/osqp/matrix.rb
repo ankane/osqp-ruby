@@ -11,7 +11,11 @@ module OSQP
     def []=(row_index, column_index, value)
       raise IndexError, "row index out of bounds" if row_index < 0 || row_index >= @m
       raise IndexError, "column index out of bounds" if column_index < 0 || column_index >= @n
-      (@data[column_index] ||= {})[row_index] = value
+      if value == 0
+        (@data[column_index] ||= {}).delete(row_index)
+      else
+        (@data[column_index] ||= {})[row_index] = value
+      end
     end
 
     def to_ptr
