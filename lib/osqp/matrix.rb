@@ -18,6 +18,10 @@ module OSQP
       end
     end
 
+    def nnz
+      @data.sum { |_, v| v.count }
+    end
+
     def to_ptr
       cx = []
       ci = []
