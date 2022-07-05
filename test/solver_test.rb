@@ -53,6 +53,9 @@ class SolverTest < Minitest::Test
     assert_equal 50, result[:iter]
     assert_equal "solved", result[:status]
     assert_in_delta 1.88, result[:obj_val]
+
+    # ensure p not mutated
+    assert_equal 4, p.nnz
   end
 
   def test_ruby_array

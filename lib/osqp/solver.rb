@@ -127,6 +127,8 @@ module OSQP
       mtx = Matrix.from_dense(mtx) unless mtx.is_a?(Matrix)
 
       if upper
+        # TODO improve performance
+        mtx = mtx.dup
         mtx.m.times do |i|
           mtx.n.times do |j|
             mtx[i, j] = 0 if i > j

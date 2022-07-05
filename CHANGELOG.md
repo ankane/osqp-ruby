@@ -1,3 +1,7 @@
+## 0.2.2 (unreleased)
+
+- Fixed mutating `p` argument when not upper triangle
+
 ## 0.2.1 (2022-07-05)
 
 - Added `Matrix` class

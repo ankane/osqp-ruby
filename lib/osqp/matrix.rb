@@ -46,6 +46,16 @@ module OSQP
       ptr
     end
 
+    # private, for tests
+    def nnz
+      @data.sum { |_, v| v.count }
+    end
+
+    def initialize_copy(other)
+      super
+      @data = @data.transform_values(&:dup)
+    end
+
     def self.from_dense(data)
       data = data.to_a
       m = data.size

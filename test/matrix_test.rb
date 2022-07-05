@@ -39,7 +39,10 @@ class MatrixTest < Minitest::Test
 
   def test_set_zero
     a = OSQP::Matrix.new(1, 2)
+    a[0, 0] = 1
+    assert_equal 1, a.nnz
     a[0, 0] = 0
+    assert_equal 0, a.nnz
   end
 
   def test_from_dense
