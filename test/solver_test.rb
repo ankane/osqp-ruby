@@ -6,9 +6,9 @@ class SolverTest < Minitest::Test
   end
 
   def test_example
-    p = [[4, 1], [1, 2]]
+    p = OSQP::Matrix.from_dense([[4, 1], [1, 2]])
     q = [1, 1]
-    a = [[1, 1], [1, 0], [0, 1]]
+    a = OSQP::Matrix.from_dense([[1, 1], [1, 0], [0, 1]])
     l = [1, 0, 0]
     u = [1, 0.7, 0.7]
 
@@ -55,10 +55,10 @@ class SolverTest < Minitest::Test
     assert_in_delta 1.88, result[:obj_val]
   end
 
-  def test_matrix_from_dense
-    p = OSQP::Matrix.from_dense([[4, 1], [1, 2]])
+  def test_ruby_array
+    p = [[4, 1], [1, 2]]
     q = [1, 1]
-    a = OSQP::Matrix.from_dense([[1, 1], [1, 0], [0, 1]])
+    a = [[1, 1], [1, 0], [0, 1]]
     l = [1, 0, 0]
     u = [1, 0.7, 0.7]
 

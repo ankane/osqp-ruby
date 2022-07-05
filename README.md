@@ -17,9 +17,9 @@ gem "osqp"
 Prep the problem - here’s how it should be [setup](https://osqp.org/docs/examples/setup-and-solve.html)
 
 ```ruby
-p = [[4, 1], [0, 2]]
+p = OSQP::Matrix.from_dense([[4, 1], [0, 2]])
 q = [1, 1]
-a = [[1, 1], [1, 0], [0, 1]]
+a = OSQP::Matrix.from_dense([[1, 1], [1, 0], [0, 1]])
 l = [1, 0, 0]
 u = [1, 0.7, 0.7]
 ```
@@ -41,24 +41,26 @@ solver.warm_start(x, y)
 
 ## Data
 
-Arrays and matrices can be Ruby arrays
+Matrices can be a sparse matrix
 
 ```ruby
-[[1, 2, 3], [4, 5, 6]]
+a = OSQP::Matrix.new(3, 2)
+a[0, 0] = 1
+a[1, 0] = 2
+# or
+OSQP::Matrix.from_dense([[1, 0], [2, 0], [0, 0]])
+```
+
+Arrays can be Ruby arrays
+
+```ruby
+[1, 2, 3]
 ```
 
 Or Numo arrays
 
 ```ruby
-Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
-```
-
-Or a sparse matrix [unreleased]
-
-```ruby
-a = OSQP::Matrix.new(3, 2)
-a[0, 0] = 1
-a[0, 1] = 1
+Numo::NArray.cast([1, 2, 3])
 ```
 
 ## Resources
