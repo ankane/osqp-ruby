@@ -124,20 +124,16 @@ module OSQP
     end
 
     def csc_matrix(mtx, upper: false)
-      return mtx if mtx.is_a?(Matrix)
+      mtx = Matrix.from_dense(mtx) unless mtx.is_a?(Matrix)
 
-      data = mtx.to_a
-      m = data.size
-      n = m > 0 ? data.first.size : 0
-
-      mtx = Matrix.new(m, n)
-      data.each_with_index do |row, i|
-        row.each_with_index do |v, j|
-          if v != 0 && (!upper || i <= j)
-            mtx[i, j] = v
+      if upper
+        mtx.m.times do |i|
+          mtx.n.times do |j|
+            mtx[i, j] = 0 if i > j
           end
         end
       end
+
       mtx
     end
 

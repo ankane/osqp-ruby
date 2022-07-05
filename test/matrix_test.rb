@@ -41,4 +41,11 @@ class MatrixTest < Minitest::Test
     a = OSQP::Matrix.new(1, 2)
     a[0, 0] = 0
   end
+
+  def test_from_dense
+    error = assert_raises(ArgumentError) do
+      OSQP::Matrix.from_dense([[1, 2], [3]])
+    end
+    assert_equal "row has different number of columns", error.message
+  end
 end

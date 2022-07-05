@@ -45,5 +45,20 @@ module OSQP
       ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
       ptr
     end
+
+    def self.from_dense(data)
+      data = data.to_a
+      m = data.size
+      n = m > 0 ? data.first.size : 0
+
+      mtx = Matrix.new(m, n)
+      data.each_with_index do |row, i|
+        raise ArgumentError, "row has different number of columns" if row.size != n
+        row.each_with_index do |v, j|
+          mtx[i, j] = v if v != 0
+        end
+      end
+      mtx
+    end
   end
 end

@@ -33,6 +33,7 @@ class SolverTest < Minitest::Test
     p = OSQP::Matrix.new(2, 2)
     p[0, 0] = 4
     p[0, 1] = 1
+    p[1, 0] = 1
     p[1, 1] = 2
 
     q = [1, 1]
@@ -43,6 +44,21 @@ class SolverTest < Minitest::Test
     a[1, 0] = 1
     a[2, 1] = 1
 
+    l = [1, 0, 0]
+    u = [1, 0.7, 0.7]
+
+    solver = OSQP::Solver.new
+    result = solver.solve(p, q, a, l, u, alpha: 1.0, verbose: false)
+
+    assert_equal 50, result[:iter]
+    assert_equal "solved", result[:status]
+    assert_in_delta 1.88, result[:obj_val]
+  end
+
+  def test_matrix_from_dense
+    p = OSQP::Matrix.from_dense([[4, 1], [1, 2]])
+    q = [1, 1]
+    a = OSQP::Matrix.from_dense([[1, 1], [1, 0], [0, 1]])
     l = [1, 0, 0]
     u = [1, 0.7, 0.7]
 
