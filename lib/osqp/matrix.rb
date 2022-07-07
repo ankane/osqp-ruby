@@ -18,7 +18,7 @@ module OSQP
       end
     end
 
-    def to_ptr
+    def to_csc
       cx = []
       ci = []
       cp = []
@@ -35,15 +35,11 @@ module OSQP
         cp << cx.size
       end
 
-      nnz = cx.size
-      cx = Utils.float_array(cx)
-      ci = Utils.int_array(ci)
-      cp = Utils.int_array(cp)
-
-      ptr = FFI.csc_matrix(m, n, nnz, cx, ci, cp)
-      # save refs
-      ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
-      ptr
+      {
+        start: cp,
+        index: ci,
+        value: cx
+      }
     end
 
     # private, for tests

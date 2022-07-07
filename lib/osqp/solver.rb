@@ -11,17 +11,17 @@ module OSQP
       # data
       # do not assign directly to struct to keep refs
       p = csc_matrix(p, upper: true)
-      q = Utils.float_array(q)
+      q = float_array(q)
       a = csc_matrix(a)
-      l = Utils.float_array(l)
-      u = Utils.float_array(u)
+      l = float_array(l)
+      u = float_array(u)
 
       data = FFI::Data.malloc
       data.n = a.n
       data.m = a.m
-      data.p = p
+      data.p = matrix_ptr(p)
       data.q = q
-      data.a = a
+      data.a = matrix_ptr(a)
       data.l = l
       data.u = u
 
@@ -73,11 +73,11 @@ module OSQP
       raise Error, "Expected y to be size #{m}, got #{y.size}" if y && y.size != m
 
       if x && y
-        check_result FFI.osqp_warm_start(@work, Utils.float_array(x), Utils.float_array(y))
+        check_result FFI.osqp_warm_start(@work, float_array(x), float_array(y))
       elsif x
-        check_result FFI.osqp_warm_start_x(@work, Utils.float_array(x))
+        check_result FFI.osqp_warm_start_x(@work, float_array(x))
       elsif y
-        check_result FFI.osqp_warm_start_y(@work, Utils.float_array(y))
+        check_result FFI.osqp_warm_start_y(@work, float_array(y))
       else
         raise Error, "Must set x or y"
       end
@@ -113,6 +113,16 @@ module OSQP
       end
     end
 
+    def float_array(arr)
+      # OSQP float = double
+      Fiddle::Pointer[arr.to_a.pack("d*")]
+    end
+
+    def int_array(arr)
+      # OSQP int = long long
+      Fiddle::Pointer[arr.to_a.pack("q*")]
+    end
+
     def read_float_array(ptr, size)
       # OSQP float = double
       ptr[0, size * Fiddle::SIZEOF_DOUBLE].unpack("d*")
@@ -137,6 +147,19 @@ module OSQP
       end
 
       mtx
+    end
+
+    def matrix_ptr(mtx)
+      csc = mtx.to_csc
+      nnz = csc[:value].size
+      cx = float_array(csc[:value])
+      ci = int_array(csc[:index])
+      cp = int_array(csc[:start])
+
+      ptr = FFI.csc_matrix(mtx.m, mtx.n, nnz, cx, ci, cp)
+      # save refs
+      ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
+      ptr
     end
 
     def dimensions
