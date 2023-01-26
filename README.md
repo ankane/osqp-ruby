@@ -2,6 +2,8 @@
 
 The [OSQP](https://osqp.org/) (Operator Splitting Quadratic Program) solver for Ruby
 
+Check out [Opt](https://github.com/ankane/opt) for a high-level interface
+
 [![Build Status](https://github.com/ankane/osqp-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/osqp-ruby/actions)
 
 ## Installation
