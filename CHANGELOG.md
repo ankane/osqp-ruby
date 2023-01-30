@@ -1,4 +1,4 @@
-## 0.2.2 (unreleased)
+## 0.2.2 (2023-01-29)
 
 - Fixed mutating `p` argument when not upper triangle
 
