@@ -1,3 +1,7 @@
+## 0.3.0 (unreleased)
+
+- Dropped support for Ruby < 3.1
+
 ## 0.2.2 (2023-01-29)
 
 - Fixed mutating `p` argument when not upper triangle
