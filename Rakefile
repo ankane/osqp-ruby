@@ -19,6 +19,7 @@ Rake::Task["build"].enhance [:ensure_vendor]
 def download_platform(platform)
   require "fileutils"
   require "open-uri"
+  require "tempfile"
   require "tmpdir"
 
   config = vendor_config.fetch("platforms").fetch(platform)

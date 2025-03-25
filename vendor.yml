@@ -13,4 +13,4 @@ platforms:
     sha256: c0f56e32926ff5762c2a8f4fe5889c52fc3aa4898a4e379d9f6d23d616b833de
   x64-mingw:
     url: https://github.com/ankane/ml-builds/releases/download/osqp-1.0.0/osqp-1.0.0-x86_64-windows.zip
-    sha256: 06f082d06243b6e9cd38d096b877a81f44841f4cb22bb1c2d00e5c6802f4d08b
+    sha256: 1320ab3de5aeea9d403a1341fb60c92c982584c7395992e9708e5ce6b2f1e3b3
