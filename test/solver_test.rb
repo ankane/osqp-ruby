@@ -91,6 +91,8 @@ class SolverTest < Minitest::Test
   end
 
   def test_numo
+    require "numo/narray"
+
     p = Numo::NArray.cast([[4, 1], [1, 2]])
     q = Numo::NArray.cast([1, 1])
     a = Numo::NArray.cast([[1, 1], [1, 0], [0, 1]])
