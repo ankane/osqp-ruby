@@ -151,6 +151,7 @@ module OSQP
     end
 
     def dimensions
+      # OSQP int = long long
       m = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
       n = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
       FFI.osqp_get_dimensions(@work, m, n)
