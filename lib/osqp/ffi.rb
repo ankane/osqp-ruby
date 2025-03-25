@@ -111,6 +111,7 @@ module OSQP
 
     # CSC matrix manipulation
     extern "OSQPCscMatrix* OSQPCscMatrix_new(OSQPInt m, OSQPInt n, OSQPInt nzmax, OSQPFloat* x, OSQPInt* i, OSQPInt* p)"
+    extern "void OSQPCscMatrix_free(OSQPCscMatrix* mat)"
 
     # main solver API
     extern "const char* osqp_version(void)"

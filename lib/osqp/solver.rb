@@ -19,6 +19,7 @@ module OSQP
       # work
       work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP)
       check_result FFI.osqp_setup(work.ref, matrix_ptr(p), q, matrix_ptr(a), l, u, a.m, a.n, set)
+      work.free = FFI["osqp_cleanup"]
       @work = FFI::Solver.new(work)
     end
 
@@ -145,6 +146,7 @@ module OSQP
       cp = int_array(csc[:start])
 
       ptr = FFI.OSQPCscMatrix_new(mtx.m, mtx.n, nnz, cx, ci, cp)
+      ptr.free = FFI["OSQPCscMatrix_free"]
       # save refs
       ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
       ptr
