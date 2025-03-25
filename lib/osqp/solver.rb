@@ -16,19 +16,10 @@ module OSQP
       l = float_array(l)
       u = float_array(u)
 
-      data = FFI::Data.malloc
-      data.n = a.n
-      data.m = a.m
-      data.p = matrix_ptr(p)
-      data.q = q
-      data.a = matrix_ptr(a)
-      data.l = l
-      data.u = u
-
       # work
-      work = FFI::Workspace.malloc
-      check_result FFI.osqp_setup(work.to_ptr.ref, data, set)
-      @work = work
+      work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP)
+      check_result FFI.osqp_setup(work.ref, matrix_ptr(p), q, matrix_ptr(a), l, u, a.m, a.n, set)
+      @work = FFI::Solver.new(work)
     end
 
     def solve(*args, **settings)
@@ -38,9 +29,9 @@ module OSQP
 
       # solution
       solution = FFI::Solution.new(@work.solution)
-      data = FFI::Data.new(@work.data)
-      x = read_float_array(solution.x, data.n)
-      y = read_float_array(solution.y, data.m)
+      m, n = dimensions
+      x = read_float_array(solution.x, n)
+      y = read_float_array(solution.y, m)
 
       # info
       info = FFI::Info.new(@work.info)
@@ -54,8 +45,8 @@ module OSQP
         status_val: info.status_val,
         status_polish: info.status_polish,
         obj_val: info.obj_val,
-        pri_res: info.pri_res,
-        dua_res: info.dua_res,
+        pri_res: info.prim_res,
+        dua_res: info.dual_res,
         setup_time: info.setup_time,
         solve_time: info.solve_time,
         update_time: info.update_time,
@@ -72,15 +63,7 @@ module OSQP
       raise Error, "Expected x to be size #{n}, got #{x.size}" if x && x.size != n
       raise Error, "Expected y to be size #{m}, got #{y.size}" if y && y.size != m
 
-      if x && y
-        check_result FFI.osqp_warm_start(@work, float_array(x), float_array(y))
-      elsif x
-        check_result FFI.osqp_warm_start_x(@work, float_array(x))
-      elsif y
-        check_result FFI.osqp_warm_start_y(@work, float_array(y))
-      else
-        raise Error, "Must set x or y"
-      end
+      check_result FFI.osqp_warm_start(@work, x ? float_array(x) : nil, y ? float_array(y) : nil)
     end
 
     private
@@ -133,6 +116,11 @@ module OSQP
       char_ptr[0, idx].map(&:chr).join
     end
 
+    def read_int(ptr)
+      # OSQP int = long long
+      ptr[0, Fiddle::SIZEOF_LONG_LONG].unpack1("q")
+    end
+
     def csc_matrix(mtx, upper: false)
       mtx = Matrix.from_dense(mtx) unless mtx.is_a?(Matrix)
 
@@ -156,15 +144,17 @@ module OSQP
       ci = int_array(csc[:index])
       cp = int_array(csc[:start])
 
-      ptr = FFI.csc_matrix(mtx.m, mtx.n, nnz, cx, ci, cp)
+      ptr = FFI.OSQPCscMatrix_new(mtx.m, mtx.n, nnz, cx, ci, cp)
       # save refs
       ptr.instance_variable_set(:@osqp_refs, [cx, ci, cp])
       ptr
     end
 
     def dimensions
-      data = FFI::Data.new(@work.data)
-      [data.m, data.n]
+      m = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
+      n = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
+      FFI.osqp_get_dimensions(@work, m, n)
+      [read_int(m), read_int(n)]
     end
 
     def create_settings(settings)

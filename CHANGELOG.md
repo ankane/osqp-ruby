@@ -1,3 +1,7 @@
+## 0.4.0 (unreleased)
+
+- Updated OSQP to 1.0.0
+
 ## 0.3.0 (2024-10-23)
 
 - Dropped support for Ruby < 3.1

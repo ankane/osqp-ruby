@@ -10,139 +10,121 @@ module OSQP
       raise e
     end
 
-    typealias "c_float", "double"
-    typealias "c_int", "long long"
+    typealias "OSQPFloat", "double"
+    typealias "OSQPInt", "long long"
     typealias "enum", "int"
 
     OSQP_INFTY = 1e30
 
-    Data = struct [
-      "c_int n",
-      "c_int m",
-      "csc *p",
-      "csc *a",
-      "c_float *q",
-      "c_float *l",
-      "c_float *u"
-    ]
-
     Settings = struct [
-      "c_float rho",
-      "c_float sigma",
-      "c_int scaling",
-      "c_int adaptive_rho",
-      "c_int adaptive_rho_interval",
-      "c_float adaptive_rho_tolerance",
-      "c_float adaptive_rho_fraction",
-      "c_int max_iter",
-      "c_float eps_abs",
-      "c_float eps_rel",
-      "c_float eps_prim_inf",
-      "c_float eps_dual_inf",
-      "c_float alpha",
-      "enum linsys_solver_type linsys_solver",
-      "c_float delta",
-      "c_int polish",
-      "c_int polish_refine_iter",
-      "c_int verbose",
-      "c_int scaled_termination",
-      "c_int check_termination",
-      "c_int warm_start",
-      "c_float time_limit"
+      # linear algebra settings
+      "OSQPInt device",
+      "enum osqp_linsys_solver_type linsys_solver",
+
+      # control settings
+      "OSQPInt allocate_solution",
+      "OSQPInt verbose",
+      "OSQPInt profiler_level",
+      "OSQPInt warm_starting",
+      "OSQPInt scaling",
+      "OSQPInt polishing",
+
+      # ADMM parameters
+      "OSQPFloat rho",
+      "OSQPInt rho_is_vec",
+      "OSQPFloat sigma",
+      "OSQPFloat alpha",
+
+      # CG settings
+      "OSQPInt cg_max_iter",
+      "OSQPInt cg_tol_reduction",
+      "OSQPFloat cg_tol_fraction",
+      "enum osqp_precond_type cg_precond",
+
+      # adaptive rho logic
+      "OSQPInt adaptive_rho",
+      "OSQPInt adaptive_rho_interval",
+      "OSQPFloat adaptive_rho_fraction",
+      "OSQPFloat adaptive_rho_tolerance",
+
+      # termination parameters
+      "OSQPInt   max_iter",
+      "OSQPFloat eps_abs",
+      "OSQPFloat eps_rel",
+      "OSQPFloat eps_prim_inf",
+      "OSQPFloat eps_dual_inf",
+      "OSQPInt scaled_termination",
+      "OSQPInt check_termination",
+      "OSQPInt check_dualgap",
+      "OSQPFloat time_limit",
+
+      # polishing parameters
+      "OSQPFloat delta",
+      "OSQPInt polish_refine_iter"
     ]
 
     Info = struct [
-      "c_int iter",
+      # solver status
       "char status[32]",
-      "c_int status_val",
-      "c_int status_polish",
-      "c_float obj_val",
-      "c_float pri_res",
-      "c_float dua_res",
-      "c_float setup_time",
-      "c_float solve_time",
-      "c_float update_time",
-      "c_float polish_time",
-      "c_float run_time",
-      "c_int   rho_updates",
-      "c_float rho_estimate"
+      "OSQPInt status_val",
+      "OSQPInt status_polish",
+
+      # solution quality
+      "OSQPFloat obj_val",
+      "OSQPFloat dual_obj_val",
+      "OSQPFloat prim_res",
+      "OSQPFloat dual_res",
+      "OSQPFloat duality_gap",
+
+      # algorithm information
+      "OSQPInt iter",
+      "OSQPInt rho_updates",
+      "OSQPFloat rho_estimate",
+
+      # timing information
+      "OSQPFloat setup_time",
+      "OSQPFloat solve_time",
+      "OSQPFloat update_time",
+      "OSQPFloat polish_time",
+      "OSQPFloat run_time",
+
+      # convergence information
+      "OSQPFloat primdual_int",
+      "OSQPFloat rel_kkt_error"
     ]
 
     Solution = struct [
-      "c_float *x",
-      "c_float *y"
+      "OSQPFloat *x",
+      "OSQPFloat *y",
+      "OSQPFloat *prim_inf_cert",
+      "OSQPFloat *dual_inf_cert"
     ]
 
-    Workspace = struct [
-      "OSQPData *data",
-      "LinSysSolver *linsys_solver",
-      "OSQPPolish *pol",
-      "c_float *rho_vec",
-      "c_float *rho_inv_vec",
-      "c_int *constr_type",
-      "c_float *x",
-      "c_float *y",
-      "c_float *z",
-      "c_float *xz_tilde",
-      "c_float *x_prev",
-      "c_float *z_prev",
-      "c_float *Ax",
-      "c_float *Px",
-      "c_float *Aty",
-      "c_float *delta_y",
-      "c_float *Atdelta_y",
-      "c_float *delta_x",
-      "c_float *Pdelta_x",
-      "c_float *Adelta_x",
-      "c_float *D_temp",
-      "c_float *D_temp_A",
-      "c_float *E_temp",
-      "OSQPSettings *settings",
-      "OSQPScaling  *scaling",
-      "OSQPSolution *solution",
-      "OSQPInfo *info",
-      "OSQPTimer *timer",
-      "c_int first_run",
-      "c_int clear_update_time",
-      "c_int rho_update_from_solve",
-      "c_int summary_printed"
+    Solver = struct [
+      "OSQPSettings* settings",
+      "OSQPSolution* solution",
+      "OSQPInfo* info",
+      "OSQPWorkspace* work"
     ]
 
-    # cs.h
-    extern "csc* csc_matrix(c_int m, c_int n, c_int nzmax, c_float *x, c_int *i, c_int *p)"
+    # https://github.com/osqp/osqp/blob/master/include/public/osqp_api_functions.h
 
-    # osqp.h
-    extern "void osqp_set_default_settings(OSQPSettings *settings)"
-    extern "c_int osqp_setup(OSQPWorkspace** workp, OSQPData* data, OSQPSettings* settings)"
-    extern "c_int osqp_solve(OSQPWorkspace *work)"
-    extern "c_int osqp_cleanup(OSQPWorkspace *work)"
-    extern "c_int osqp_update_lin_cost(OSQPWorkspace *work, c_float *q_new)"
-    extern "c_int osqp_update_bounds(OSQPWorkspace *work, c_float *l_new, c_float *u_new)"
-    extern "c_int osqp_update_lower_bound(OSQPWorkspace *work, c_float *l_new)"
-    extern "c_int osqp_update_upper_bound(OSQPWorkspace *work, c_float *u_new)"
-    extern "c_int osqp_warm_start(OSQPWorkspace *work, c_float *x, c_float *y)"
-    extern "c_int osqp_warm_start_x(OSQPWorkspace *work, c_float *x)"
-    extern "c_int osqp_warm_start_y(OSQPWorkspace *work, c_float *y)"
-    extern "c_int osqp_update_P(OSQPWorkspace *work, c_float *Px_new, c_int *Px_new_idx, c_int P_new_n)"
-    extern "c_int osqp_update_A(OSQPWorkspace *work, c_float *Ax_new, c_int *Ax_new_idx, c_int A_new_n)"
-    extern "c_int osqp_update_P_A(OSQPWorkspace *work, c_float *Px_new, c_int *Px_new_idx, c_int P_new_n, c_float *Ax_new, c_int *Ax_new_idx, c_int A_new_n)"
-    extern "c_int osqp_update_rho(OSQPWorkspace *work, c_float rho_new)"
-    extern "c_int osqp_update_max_iter(OSQPWorkspace *work, c_int max_iter_new)"
-    extern "c_int osqp_update_eps_abs(OSQPWorkspace *work, c_float eps_abs_new)"
-    extern "c_int osqp_update_eps_rel(OSQPWorkspace *work, c_float eps_rel_new)"
-    extern "c_int osqp_update_eps_prim_inf(OSQPWorkspace *work, c_float eps_prim_inf_new)"
-    extern "c_int osqp_update_eps_dual_inf(OSQPWorkspace *work, c_float eps_dual_inf_new)"
-    extern "c_int osqp_update_alpha(OSQPWorkspace *work, c_float alpha_new)"
-    extern "c_int osqp_update_warm_start(OSQPWorkspace *work, c_int warm_start_new)"
-    extern "c_int osqp_update_scaled_termination(OSQPWorkspace *work, c_int scaled_termination_new)"
-    extern "c_int osqp_update_check_termination(OSQPWorkspace *work, c_int check_termination_new)"
-    extern "c_int osqp_update_delta(OSQPWorkspace *work, c_float delta_new)"
-    extern "c_int osqp_update_polish(OSQPWorkspace *work, c_int polish_new)"
-    extern "c_int osqp_update_polish_refine_iter(OSQPWorkspace *work, c_int polish_refine_iter_new)"
-    extern "c_int osqp_update_verbose(OSQPWorkspace *work, c_int verbose_new)"
-    extern "c_int osqp_update_time_limit(OSQPWorkspace *work, c_float time_limit_new)"
+    # CSC matrix manipulation
+    extern "OSQPCscMatrix* OSQPCscMatrix_new(OSQPInt m, OSQPInt n, OSQPInt nzmax, OSQPFloat* x, OSQPInt* i, OSQPInt* p)"
 
-    # util.h
+    # main solver API
     extern "const char* osqp_version(void)"
+    extern "const char* osqp_error_message(OSQPInt error_flag)"
+    extern "void osqp_get_dimensions(OSQPSolver* solver, OSQPInt* m, OSQPInt* n)"
+    extern "OSQPInt osqp_setup(OSQPSolver** solverp, OSQPCscMatrix* P, OSQPFloat* q, OSQPCscMatrix* A, OSQPFloat* l, OSQPFloat* u, OSQPInt m, OSQPInt n, OSQPSettings* settings)"
+    extern "OSQPInt osqp_solve(OSQPSolver* solver)"
+    extern "OSQPInt osqp_cleanup(OSQPSolver* solver)"
+
+    # sublevel API
+    extern "OSQPInt osqp_warm_start(OSQPSolver* solver, OSQPFloat* x, OSQPFloat* y)"
+    extern "void osqp_cold_start(OSQPSolver* solver)"
+
+    # settings
+    extern "void osqp_set_default_settings(OSQPSettings* settings)"
   end
 end
