@@ -1,4 +1,4 @@
-## 0.4.0 (unreleased)
+## 0.4.0 (2025-04-01)
 
 - Updated OSQP to 1.0.0
 - Dropped support for Ruby < 3.2
