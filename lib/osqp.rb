@@ -2,9 +2,9 @@
 require "fiddle/import"
 
 # modules
-require "osqp/matrix"
-require "osqp/solver"
-require "osqp/version"
+require_relative "osqp/matrix"
+require_relative "osqp/solver"
+require_relative "osqp/version"
 
 module OSQP
   class Error < StandardError; end
