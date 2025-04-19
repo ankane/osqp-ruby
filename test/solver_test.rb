@@ -74,8 +74,6 @@ class SolverTest < Minitest::Test
   end
 
   def test_ruby_matrix
-    require "matrix"
-
     p = Matrix.rows([[4, 1], [1, 2]])
     q = Vector.elements([1, 1])
     a = Matrix.rows([[1, 1], [1, 0], [0, 1]])
@@ -92,8 +90,6 @@ class SolverTest < Minitest::Test
 
   def test_numo
     skip if RUBY_PLATFORM == "java"
-
-    require "numo/narray"
 
     p = Numo::NArray.cast([[4, 1], [1, 2]])
     q = Numo::NArray.cast([1, 1])
