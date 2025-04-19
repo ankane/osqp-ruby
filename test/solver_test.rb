@@ -91,6 +91,8 @@ class SolverTest < Minitest::Test
   end
 
   def test_numo
+    skip if RUBY_PLATFORM == "java"
+
     require "numo/narray"
 
     p = Numo::NArray.cast([[4, 1], [1, 2]])
