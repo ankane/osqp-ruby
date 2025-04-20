@@ -89,7 +89,7 @@ class SolverTest < Minitest::Test
   end
 
   def test_numo
-    skip if RUBY_PLATFORM == "java"
+    skip if ["jruby", "truffleruby"].include?(RUBY_ENGINE)
 
     p = Numo::NArray.cast([[4, 1], [1, 2]])
     q = Numo::NArray.cast([1, 1])
