@@ -17,7 +17,7 @@ module OSQP
       u = float_array(u)
 
       # work
-      work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP)
+      work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP, Fiddle::RUBY_FREE)
       check_result FFI.osqp_setup(work.ref, matrix_ptr(p), q, matrix_ptr(a), l, u, a.m, a.n, set)
       work.free = FFI["osqp_cleanup"]
       @work = FFI::Solver.new(work)
@@ -154,8 +154,8 @@ module OSQP
 
     def dimensions
       # OSQP int = long long
-      m = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
-      n = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG)
+      m = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG, Fiddle::RUBY_FREE)
+      n = Fiddle::Pointer.malloc(Fiddle::SIZEOF_LONG_LONG, Fiddle::RUBY_FREE)
       FFI.osqp_get_dimensions(@work, m, n)
       [read_int(m), read_int(n)]
     end

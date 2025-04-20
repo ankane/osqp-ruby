@@ -1,3 +1,7 @@
+## 0.4.1 (unreleased)
+
+- Fixed memory leaks
+
 ## 0.4.0 (2025-04-01)
 
 - Updated OSQP to 1.0.0
