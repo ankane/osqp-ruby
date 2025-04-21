@@ -170,7 +170,7 @@ module OSQP
     end
 
     def create_settings(settings)
-      set = FFI::Settings.malloc
+      set = FFI::Settings.malloc(Fiddle::RUBY_FREE)
       FFI.osqp_set_default_settings(set)
 
       # hack for setting members with []=
