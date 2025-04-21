@@ -17,8 +17,9 @@ module OSQP
       u = float_array(u)
 
       # work
-      work = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP, Fiddle::RUBY_FREE)
-      check_result FFI.osqp_setup(work.ref, matrix_ptr(p), q, matrix_ptr(a), l, u, a.m, a.n, set)
+      @work_ptr = Fiddle::Pointer.malloc(Fiddle::SIZEOF_VOIDP, Fiddle::RUBY_FREE)
+      check_result FFI.osqp_setup(@work_ptr, matrix_ptr(p), q, matrix_ptr(a), l, u, a.m, a.n, set)
+      work = @work_ptr.ptr
       work.free = FFI["osqp_cleanup"]
       @work = FFI::Solver.new(work)
     end
