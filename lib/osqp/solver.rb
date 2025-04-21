@@ -81,15 +81,23 @@ module OSQP
           when 2
             "Settings validation error"
           when 3
-            "Linear system solver loading error"
-          when 4
             "Linear system solver initialization error"
-          when 5
+          when 4
             "Non-convex problem"
-          when 6
+          when 5
             "Memory allocation error"
-          when 7
+          when 6
             "Workspace not initialized"
+          when 7
+            "Error loading algebra library"
+          when 8
+            "Error opening file for writing"
+          when 9
+            "Error validating given code generation defines"
+          when 10
+            "Solver data not initialized"
+          when 11
+            "Function not implemented in current algebra"
           else
             "Error code #{ret}"
           end
