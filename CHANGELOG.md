@@ -1,4 +1,4 @@
-## 0.4.1 (unreleased)
+## 0.4.1 (2025-04-26)
 
 - Fixed memory leaks
 - Fixed error messages for OSQP 1.0.0
