@@ -11,6 +11,8 @@ namespace :test do
   RubyMemcheck::TestTask.new(:valgrind, &test_config)
 end
 
+task default: :test
+
 # ensure vendor files exist
 task :ensure_vendor do
   vendor_config.fetch("platforms").each_key do |k|
