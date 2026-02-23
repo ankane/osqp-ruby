@@ -1,3 +1,7 @@
+## 0.4.2 (unreleased)
+
+- Fixed memory leak with exceptions
+
 ## 0.4.1 (2025-04-26)
 
 - Fixed memory leaks

@@ -29,6 +29,20 @@ class SolverTest < Minitest::Test
     assert_equal "Expected x to be size 2, got 3", error.message
   end
 
+  def test_non_convex
+    p = OSQP::Matrix.from_dense([[-2]])
+    q = [0]
+    a = [[1]]
+    l = [0]
+    u = [Float::INFINITY]
+
+    solver = OSQP::Solver.new
+    error = assert_raises OSQP::Error do
+      solver.solve(p, q, a, l, u)
+    end
+    assert_equal "Non-convex problem", error.message
+  end
+
   def test_matrix
     p = OSQP::Matrix.new(2, 2)
     p[0, 0] = 4
