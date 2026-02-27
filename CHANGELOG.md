@@ -1,4 +1,4 @@
-## 0.4.2 (unreleased)
+## 0.4.2 (2026-02-27)
 
 - Fixed memory leak with exceptions
 
